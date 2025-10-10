@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced 3D Rotating Cards with Play Button</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6e8efb 0%, #a777e3 25%, #6e8efb 50%, #a777e3 75%, #6e8efb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .big-card {
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .big-card img {
+            display: block;
+            width: 300px;
+            height: auto;
+            border-radius: 15px;
+        }
+        .big-card .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: auto;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .big-card:active {
+            transform: scale(0.95);
+        }
+        .button-container {
+            display: flex;
+            gap: 30px;
+            perspective: 1200px;
+        }
+        .image-button {
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            position: relative;
+        }
+        .image-button img {
+            display: block;
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .image-button .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: auto;
+        }
+        .image-button:active {
+            transform: scale(0.95);
+        }
+        @keyframes wiggle3D {
+            0% { 
+                transform: rotateY(-15deg) skewY(2deg) scale(1); 
+                box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+            }
+            50% { 
+                transform: rotateY(15deg) skewY(-2deg) scale(1.02); 
+                box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.2);
+            }
+            100% { 
+                transform: rotateY(-15deg) skewY(2deg) scale(1); 
+                box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+            }
+        }
+        .big-card img:not(.overlay), .image-button img:not(.overlay) {
+            animation: wiggle3D 3s infinite ease-in-out;
+        }
+        .play-button {
+            display: inline-block;
+            padding: 15px 30px;
+            border: 3px solid rgba(128, 128, 128, 0.9);
+            background: linear-gradient(45deg, rgba(255, 230, 230, 0.9), rgba(230, 255, 230, 0.9), rgba(230, 230, 255, 0.9), rgba(255, 255, 230, 0.9), rgba(255, 230, 255, 0.9));
+            border-radius: 50px;
+            font-size: 24px;
+            color: #666;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, padding 0.3s ease;
+            white-space: nowrap;
+            margin-top: 20px;
+        }
+        .play-button:hover {
+            transform: scale(1.1);
+            padding: 18px 36px;
+        }
+        .play-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <button class="big-card">
+            <img src="images/cardbutton3dgrey.png" alt="Big Card">
+        </button>
+        <div class="button-container">
+            <button class="image-button" data-card-id="1">
+                <img src="images/cardbutton3dgold.png" alt="Card 1">
+                <img class="overlay" src="images/button1.png" alt="Overlay 1" data-original-card="1">
+            </button>
+            <button class="image-button" data-card-id="2">
+                <img src="images/cardbutton3dgold.png" alt="Card 2">
+                <img class="overlay" src="images/button2.png" alt="Overlay 2" data-original-card="2">
+            </button>
+            <button class="image-button" data-card-id="3">
+                <img src="images/cardbutton3dgold.png" alt="Card 3">
+                <img class="overlay" src="images/button3.png" alt="Overlay 3" data-original-card="3">
+            </button>
+        </div>
+    </div>
+    <button class="play-button">Play</button>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const smallCards = document.querySelectorAll('.image-button');
+            const bigCard = document.querySelector('.big-card');
+            const playButton = document.querySelector('.play-button');
+            let currentOverlay = null;
+            let currentCardId = null;
+            let isAnimating = false;
+
+            // Function to center overlay on a card
+            function centerOverlay(overlay, parent) {
+                const parentRect = parent.getBoundingClientRect();
+                const overlayRect = overlay.getBoundingClientRect();
+                const parentHeight = parentRect.height;
+                const parentWidth = parentRect.width;
+                const overlayHeight = overlayRect.height;
+                const overlayWidth = overlayRect.width;
+
+                overlay.style.position = 'absolute';
+                overlay.style.top = (parentHeight / 2 - overlayHeight / 2) + 'px';
+                overlay.style.left = (parentWidth / 2 - overlayWidth / 2) + 'px';
+                overlay.style.transform = 'none'; // Remove transform for pixel-perfect centering
+            }
+
+            // Initial centering for all overlays after images load
+            const allOverlays = document.querySelectorAll('.overlay');
+            allOverlays.forEach(overlay => {
+                overlay.addEventListener('load', () => {
+                    const parent = overlay.closest('.big-card, .image-button');
+                    if (parent) {
+                        centerOverlay(overlay, parent);
+                    }
+                });
+                // Trigger load if already loaded
+                if (overlay.complete) {
+                    const parent = overlay.closest('.big-card, .image-button');
+                    if (parent) {
+                        centerOverlay(overlay, parent);
+                    }
+                }
+            });
+
+            // Function to move overlay back to original card
+            function moveOverlayBack(overlay, originalCard, onComplete) {
+                const startPos = overlay.getBoundingClientRect();
+                const endPos = originalCard.getBoundingClientRect();
+
+                const startWidth = startPos.width;
+                const endWidth = 100;
+                const ratio = endWidth / startWidth;
+                const endHeight = startPos.height * ratio;
+
+                const startTop = startPos.top + window.scrollY;
+                const startLeft = startPos.left + window.scrollX;
+                const endTop = endPos.top + window.scrollY + (endPos.height / 2) - (endHeight / 2);
+                const endLeft = endPos.left + window.scrollX + (endPos.width / 2) - (endWidth / 2);
+
+                overlay.style.position = 'absolute';
+                overlay.style.top = `${startTop}px`;
+                overlay.style.left = `${startLeft}px`;
+                overlay.style.width = '200px';
+                overlay.style.transition = 'top 0.2s ease-in-out, left 0.2s ease-in-out, width 0.2s ease-in-out';
+
+                document.body.appendChild(overlay);
+
+                requestAnimationFrame(() => {
+                    overlay.style.top = `${endTop}px`;
+                    overlay.style.left = `${endLeft}px`;
+                    overlay.style.width = `${endWidth}px`;
+                });
+
+                setTimeout(() => {
+                    overlay.style.position = 'absolute';
+                    overlay.style.top = '50%';
+                    overlay.style.left = '50%';
+                    overlay.style.transform = 'translate(-50%, -50%)';
+                    overlay.style.transition = 'none';
+                    overlay.style.width = '';
+                    originalCard.appendChild(overlay);
+                    centerOverlay(overlay, originalCard);
+                    if (onComplete) onComplete();
+                }, 200);
+            }
+
+            smallCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const cardId = card.dataset.cardId;
+                    if (cardId === currentCardId || isAnimating) return; // Already selected or animating
+
+                    isAnimating = true;
+
+                    const moveBackPromise = new Promise((resolve) => {
+                        if (currentOverlay) {
+                            // Move currentOverlay back to its original card
+                            const originalCard = document.querySelector(`.image-button[data-card-id="${currentOverlay.dataset.originalCard}"]`);
+                            moveOverlayBack(currentOverlay, originalCard, () => {
+                                currentOverlay = null;
+                                currentCardId = null;
+                                resolve();
+                            });
+                        } else {
+                            resolve();
+                        }
+                    });
+
+                    moveBackPromise.then(() => {
+                        const overlay = card.querySelector('.overlay');
+                        if (!overlay) {
+                            isAnimating = false;
+                            return;
+                        }
+
+                        const startPos = overlay.getBoundingClientRect();
+                        const endPos = bigCard.getBoundingClientRect();
+
+                        const startWidth = startPos.width;
+                        const endWidth = 200;
+                        const ratio = endWidth / startWidth;
+                        const endHeight = startPos.height * ratio;
+
+                        const startTop = startPos.top + window.scrollY;
+                        const startLeft = startPos.left + window.scrollX;
+                        const endTop = endPos.top + window.scrollY + (endPos.height / 2) - (endHeight / 2);
+                        const endLeft = endPos.left + window.scrollX + (endPos.width / 2) - (endWidth / 2);
+
+                        overlay.style.position = 'absolute';
+                        overlay.style.top = `${startTop}px`;
+                        overlay.style.left = `${startLeft}px`;
+                        overlay.style.width = '100px';
+                        overlay.style.transition = 'top 0.2s ease-in-out, left 0.2s ease-in-out, width 0.2s ease-in-out';
+
+                        document.body.appendChild(overlay);
+
+                        requestAnimationFrame(() => {
+                            overlay.style.top = `${endTop}px`;
+                            overlay.style.left = `${endLeft}px`;
+                            overlay.style.width = `${endWidth}px`;
+                        });
+
+                        setTimeout(() => {
+                            overlay.style.position = 'absolute';
+                            overlay.style.top = '50%';
+                            overlay.style.left = '50%';
+                            overlay.style.transform = 'translate(-50%, -50%)';
+                            overlay.style.transition = 'none';
+                            overlay.style.width = '';
+                            bigCard.appendChild(overlay);
+                            centerOverlay(overlay, bigCard); // Center on big card after animation
+                            currentOverlay = overlay;
+                            currentCardId = cardId;
+                            isAnimating = false;
+                        }, 200);
+                    });
+                });
+            });
+
+            // Big card click handler to return overlay
+            bigCard.addEventListener('click', () => {
+                if (!currentOverlay || isAnimating) return;
+
+                isAnimating = true;
+                const originalCard = document.querySelector(`.image-button[data-card-id="${currentOverlay.dataset.originalCard}"]`);
+                moveOverlayBack(currentOverlay, originalCard, () => {
+                    currentOverlay = null;
+                    currentCardId = null;
+                    isAnimating = false;
+                });
+            });
+
+            // Play button click handler
+            playButton.addEventListener('click', () => {
+                if (!currentCardId) return; // No card selected
+
+                let url;
+                if (currentCardId === '1') {
+                    url = 'mods.html'; // Example URL for card 1
+                } else if (currentCardId === '2') {
+                    url = 'help.html'; // Example URL for card 2
+                } else if (currentCardId === '3') {
+                    url = 'extras.html'; // Example URL for card 3
+                }
+                window.location.href = url;
+            });
+        });
+    </script>
+</body>
+</html>
