@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mods</title>
+    <title>NL Mod Page</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -21,6 +21,78 @@
             animation: gradientShift 20s ease infinite;
         }
 
+        body.dark-theme {
+            background: linear-gradient(135deg, #0a41c1 0%, #750ac1 25%, #0a41c1 50%, #750ac1 75%, #0a41c1 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #6fb2ff;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            content: "☀";
+            position: absolute;
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: #6e7afb;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            content: "☾";
+            transform: translateX(26px);
+        }
+
+        body.dark-theme .toggle-switch input:checked + .slider {
+            background-color: #2a0b7b;
+        }
+
         #logo {
             position: fixed;
             top: 10px;
@@ -29,17 +101,8 @@
         }
 
         #logo img {
-            width: 50px; /* Adjust size as needed */
+            width: 50px;
             height: auto;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
         }
 
         .content {
@@ -54,21 +117,23 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 15px;
             padding: 30px;
-            width: 550px;
+            width: 640px;
             height: 650px;
             overflow-y: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
 
-        .sidebar::-webkit-scrollbar {
-            display: none;
+        body.dark-theme .sidebar {
+            background: rgba(255, 255, 255, 0.05);
         }
+
+        .sidebar::-webkit-scrollbar { display: none; }
 
         .search-bar {
             width: 100%;
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
             border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 25px;
             background: rgba(255, 255, 255, 0.1);
@@ -77,8 +142,88 @@
             box-sizing: border-box;
         }
 
+        body.dark-theme .search-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
         .search-bar::placeholder {
             color: rgba(255, 255, 255, 0.7);
+        }
+
+        .attraction-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .attraction-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 8px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            width: 92px;
+            text-align: center;
+            line-height: 1.15;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .attraction-btn img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .attraction-btn:hover {
+            transform: scale(1.04);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .attraction-btn.active {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+        }
+
+        .attraction-section {
+            margin-bottom: 22px;
+        }
+
+        .attraction-section.hidden,
+        .entry.hidden {
+            display: none;
+        }
+
+        .attraction-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            margin: 0 0 12px 0;
+            font-size: 17px;
+        }
+
+        .attraction-heading img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .empty-mods {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 14px;
+            margin: 0 0 8px 42px;
         }
 
         .entries-grid {
@@ -101,8 +246,8 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .entry.hidden {
-            display: none;
+        body.dark-theme .entry:hover {
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .entry img {
@@ -111,6 +256,7 @@
             border-radius: 10px;
             object-fit: cover;
             flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.15);
         }
 
         .entry-content {
@@ -124,7 +270,7 @@
         .entry h3 {
             color: #fff;
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             word-wrap: break-word;
         }
 
@@ -134,7 +280,7 @@
             border: 3px solid rgba(128, 128, 128, 0.9);
             background: linear-gradient(45deg, rgba(255, 230, 230, 0.9), rgba(230, 255, 230, 0.9), rgba(230, 230, 255, 0.9), rgba(255, 255, 230, 0.9), rgba(255, 230, 255, 0.9));
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 16px;
             color: #666;
             text-decoration: none;
             text-align: center;
@@ -144,13 +290,14 @@
             box-sizing: border-box;
         }
 
-        .download-btn:hover {
-            transform: scale(1.05);
+        body.dark-theme .download-btn {
+            color: #f0f0f0;
+            border-color: rgba(200, 200, 200, 0.7);
+            background: linear-gradient(45deg, rgba(80, 60, 80, 0.9), rgba(60, 80, 60, 0.9), rgba(60, 60, 80, 0.9), rgba(80, 80, 60, 0.9), rgba(80, 60, 80, 0.9));
         }
 
-        .download-btn:active {
-            transform: scale(0.98);
-        }
+        .download-btn:hover { transform: scale(1.05); }
+        .download-btn:active { transform: scale(0.98); }
 
         .description {
             width: 600px;
@@ -164,9 +311,11 @@
             -ms-overflow-style: none;
         }
 
-        .description::-webkit-scrollbar {
-            display: none;
+        body.dark-theme .description {
+            background: rgba(255, 255, 255, 0.05);
         }
+
+        .description::-webkit-scrollbar { display: none; }
 
         .description.fade-out {
             opacity: 0;
@@ -179,12 +328,8 @@
         }
 
         @keyframes fadeInLine {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .description h2 {
@@ -204,6 +349,7 @@
             margin-top: 15px;
             border-radius: 10px;
             display: block;
+            background: rgba(0, 0, 0, 0.15);
         }
 
         .play-button {
@@ -220,89 +366,547 @@
             white-space: nowrap;
         }
 
+        body.dark-theme .play-button {
+            color: #f0f0f0;
+            border-color: rgba(200, 200, 200, 0.7);
+            background: linear-gradient(45deg, rgba(80, 60, 80, 0.9), rgba(60, 80, 60, 0.9), rgba(60, 60, 80, 0.9), rgba(80, 80, 60, 0.9), rgba(80, 60, 80, 0.9));
+        }
+
         .play-button:hover {
             transform: scale(1.05);
             padding: 18px 36px;
         }
 
-        .play-button:active {
-            transform: scale(0.98);
-        }
+        .play-button:active { transform: scale(0.98); }
     </style>
 </head>
-<!-- CHANGE THIS -->
 <body>
+    <div id="theme-toggle">
+        <label class="toggle-switch">
+            <input type="checkbox" id="theme-switch">
+            <span class="slider"></span>
+        </label>
+    </div>
     <div id="logo">
         <img src="images/button1.png" alt="Button 1">
     </div>
     <div class="content">
         <div class="sidebar">
             <input type="text" class="search-bar" placeholder="Search mods..." id="search-input">
-            <div class="entries-grid">
-                <div class="entry" data-mod="1">
-                    <img src="images/mods/toadette.png" alt="Cool Mod">
-                    <div class="entry-content">
-                        <h3>Toadette</h3>
-                        <a href="download1.zip" class="download-btn" download>⤓ Download</a>
+
+            <div class="attraction-filters" id="attraction-filters">
+                <button type="button" class="attraction-btn active" data-filter="all">
+                    <img src="images/attractions/all.png" alt="All">
+                    <span>All</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="mariochase">
+                    <img src="images/attractions/mariochase.png" alt="Mario Chase">
+                    <span>Mario Chase</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="ghostmansion">
+                    <img src="images/attractions/ghostmansion.png" alt="Luigi's Ghost Mansion">
+                    <span>Luigi's Ghost Mansion</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="crashcourse">
+                    <img src="images/attractions/crashcourse.png" alt="Donkey Kong's Crash Course">
+                    <span>Donkey Kong's Crash Course</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="battlequest">
+                    <img src="images/attractions/battlequest.png" alt="The Legend of Zelda: Battle Quest">
+                    <span>The Legend of Zelda: Battle Quest</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="pikmin">
+                    <img src="images/attractions/pikmin.png" alt="Pikmin Adventure">
+                    <span>Pikmin Adventure</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="metroid">
+                    <img src="images/attractions/metroid.png" alt="Metroid Blast">
+                    <span>Metroid Blast</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="animalcrossing">
+                    <img src="images/attractions/animalcrossing.png" alt="Animal Crossing: Sweet Day">
+                    <span>Animal Crossing: Sweet Day</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="balloontrip">
+                    <img src="images/attractions/balloontrip.png" alt="Balloon Trip Breeze">
+                    <span>Balloon Trip Breeze</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="fruitcart">
+                    <img src="images/attractions/fruitcart.png" alt="Yoshi's Fruit Cart">
+                    <span>Yoshi's Fruit Cart</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="octopus">
+                    <img src="images/attractions/octopus.png" alt="Octopus Dance">
+                    <span>Octopus Dance</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="ninja">
+                    <img src="images/attractions/ninja.png" alt="Takamaru's Ninja Castle">
+                    <span>Takamaru's Ninja Castle</span>
+                </button>
+                <button type="button" class="attraction-btn" data-filter="twisterrace">
+                    <img src="images/attractions/twisterrace.png" alt="Captain Falcon's Twister Race">
+                    <span>Captain Falcon's Twister Race</span>
+                </button>
+            </div>
+
+            <div class="attraction-section" data-attraction="mariochase">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/mariochase.png" alt="">
+                    Mario Chase
+                </h3>
+                <div class="entries-grid">
+                    <div class="entry" data-mod="mariocheats" data-attraction="mariochase">
+                        <img src="images/mods/MarioCheats.png" alt="Mario Cheats">
+                        <div class="entry-content">
+                            <h3>Mario Chase Cheats</h3>
+                            <a href="mods/NintendoLand_MarioChaseCheats.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="yoshizero" data-attraction="mariochase">
+                        <img src="images/mods/YoshiZero.png" alt="Yoshis Zero">
+                        <div class="entry-content">
+                            <h3>No Yoshis</h3>
+                            <a href="mods/NintendoLand_MroYoshiZero.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="yoshione" data-attraction="mariochase">
+                        <img src="images/mods/YoshiOne.png" alt="Yoshis One">
+                        <div class="entry-content">
+                            <h3>One Yoshi</h3>
+                            <a href="mods/NintendoLand_MroYoshiOne.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="mroinvincible" data-attraction="mariochase">
+                        <img src="images/mods/MroInvincible.png" alt="Mario Chase Invincible">
+                        <div class="entry-content">
+                            <h3>Mario Chase Invincible Mod</h3>
+                            <a href="mods/NintendoLand_MroInvincible.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="gerudofortress" data-attraction="mariochase">
+                        <img src="images/mods/GerudoFortress.png" alt="Gerudo Fortress Map">
+                        <div class="entry-content">
+                            <h3>Gerudo Fortress Map</h3>
+                            <a href="mods/NintendoLand_GerudoFortress.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="luigimansion" data-attraction="mariochase">
+                        <img src="images/mods/LuigiMansion.png" alt="Luigi's Mansion Map">
+                        <div class="entry-content">
+                            <h3>Luigi's Mansion Map</h3>
+                            <a href="mods/NintendoLand_MarioLuigiMap.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="mario64" data-attraction="mariochase">
+                        <img src="images/mods/Mario64.png" alt="Mario Sixty Four Map">
+                        <div class="entry-content">
+                            <h3>Mario64 Peach's Castle Map</h3>
+                            <a href="mods/NintendoLand_Mario64.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="mariocustomcolors" data-attraction="mariochase">
+                        <img src="images/mods/MarioCustomColors.png" alt="Mario Custom Colors">
+                        <div class="entry-content">
+                            <h3>Mario Chase Custom Toad Colors</h3>
+                            <a href="mods/NintendoLand_MarioCustomColors.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="mk64" data-attraction="mariochase">
+                        <img src="images/mods/MK64.png" alt="MK Sixty Four">
+                        <div class="entry-content">
+                            <h3>Block Fort Battle Map (MK64)</h3>
+                            <a href="mods/NintendoLand_MK64.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="outsetisland" data-attraction="mariochase">
+                        <img src="images/mods/OutsetIsland.png" alt="Outset Island">
+                        <div class="entry-content">
+                            <h3>Outset Island Map</h3>
+                            <a href="mods/NintendoLand_OutsetIsland.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="tenminute" data-attraction="mariochase">
+                        <img src="images/mods/TenMinute.png" alt="Ten Minutes">
+                        <div class="entry-content">
+                            <h3>Ten Minute Round Mod</h3>
+                            <a href="mods/NintendoLand_MroTenMinute.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="toadette" data-attraction="mariochase">
+                        <img src="images/mods/toadette.png" alt="Toadette">
+                        <div class="entry-content">
+                            <h3>Toadette Skin</h3>
+                            <a href="mods/NintendoLand_MarioToadette.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
                     </div>
                 </div>
-                <div class="entry" data-mod="2">
-                    <img src="https://via.placeholder.com/280x100/a777e3/ffffff?text=Awesome+Mod" alt="Awesome Mod">
-                    <div class="entry-content">
-                        <h3>Awesome Mod</h3>
-                        <a href="download2.zip" class="download-btn" download>⤓ Download</a>
+            </div>
+
+            <div class="attraction-section" data-attraction="ghostmansion">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/ghostmansion.png" alt="">
+                    Luigi's Ghost Mansion
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="crashcourse">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/crashcourse.png" alt="">
+                    Donkey Kong's Crash Course
+                </h3>
+                <div class="entries-grid">
+                    <div class="entry" data-mod="americaflag" data-attraction="crashcourse">
+                        <img src="images/mods/AmericaFlag.png" alt="Donkey Kong American Flag">
+                        <div class="entry-content">
+                            <h3>Checkpoint to American Flag</h3>
+                            <a href="mods/NintendoLand_DKAmericaFlag.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="blueplayer" data-attraction="crashcourse">
+                        <img src="images/mods/BluePlayer.png" alt="Donkey Kong Blue Player">
+                        <div class="entry-content">
+                            <h3>Blue Player Skin</h3>
+                            <a href="mods/NintendoLand_DKBluePlayer.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="dkmappack1" data-attraction="crashcourse">
+                        <img src="images/mods/DKMapPack1.png" alt="Donkey Kong Map Pack One">
+                        <div class="entry-content">
+                            <h3>Donkey Kong Map Pack 1</h3>
+                            <a href="mods/NintendoLand_DKMapPack1.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="flagfix" data-attraction="crashcourse">
+                        <img src="images/mods/FlagFix.png" alt="Flag Fix">
+                        <div class="entry-content">
+                            <h3>Checkpoint Fix</h3>
+                            <a href="mods/NintendoLand_DKFlagFix.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="invincible" data-attraction="crashcourse">
+                        <img src="images/mods/Invincible.png" alt="Invincible">
+                        <div class="entry-content">
+                            <h3>DKCC Invincible Mod</h3>
+                            <a href="mods/NintendoLand_DKInvincible.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="paulinetomonita" data-attraction="crashcourse">
+                        <img src="images/mods/PaulineToMonita.png" alt="Pauline to Monita">
+                        <div class="entry-content">
+                            <h3>Pauline to Monita</h3>
+                            <a href="mods/NintendoLand_DKPaulineToMonita.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="railcolors" data-attraction="crashcourse">
+                        <img src="images/mods/RailColors.png" alt="Rail Colors">
+                        <div class="entry-content">
+                            <h3>3 Rail Colors</h3>
+                            <a href="mods/NintendoLand_DKRailColors.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="zyiahendflag" data-attraction="crashcourse">
+                        <img src="images/mods/ZyiahEndFlag.png" alt="Zyiah End Flag">
+                        <div class="entry-content">
+                            <h3>Zyiah's End Flag</h3>
+                            <a href="mods/NintendoLand_DKZyiahEndFlag.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
                     </div>
                 </div>
-                <div class="entry" data-mod="3">
-                    <img src="https://via.placeholder.com/280x100/6e8efb/ffffff?text=Ultimate+Mod" alt="Ultimate Mod">
-                    <div class="entry-content">
-                        <h3>Ultimate Mod</h3>
-                        <a href="download3.zip" class="download-btn" download>⤓ Download</a>
+            </div>
+
+            <div class="attraction-section" data-attraction="battlequest">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/battlequest.png" alt="">
+                    The Legend of Zelda: Battle Quest
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="pikmin">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/pikmin.png" alt="">
+                    Pikmin Adventure
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="metroid">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/metroid.png" alt="">
+                    Metroid Blast
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="animalcrossing">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/animalcrossing.png" alt="">
+                    Animal Crossing: Sweet Day
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="balloontrip">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/balloontrip.png" alt="">
+                    Balloon Trip Breeze
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="fruitcart">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/fruitcart.png" alt="">
+                    Yoshi's Fruit Cart
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="octopus">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/octopus.png" alt="">
+                    Octopus Dance
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="ninja">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/ninja.png" alt="">
+                    Takamaru's Ninja Castle
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <div class="attraction-section" data-attraction="twisterrace">
+                <h3 class="attraction-heading">
+                    <img src="images/attractions/twisterrace.png" alt="">
+                    Captain Falcon's Twister Race
+                </h3>
+                <p class="empty-mods">No mods listed yet.</p>
+                <div class="entries-grid"></div>
+            </div>
+
+            <!-- Misc / non-attraction: only under All -->
+            <div class="attraction-section" data-attraction="misc" id="misc-section">
+                <h3 class="attraction-heading">Other</h3>
+                <div class="entries-grid">
+                    <div class="entry" data-mod="plazafall" data-attraction="misc">
+                        <img src="images/mods/PlazaFall.png" alt="Plaza Fall">
+                        <div class="entry-content">
+                            <h3>Plaza Fall</h3>
+                            <a href="mods/NintendoLand_PlazaFall.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
                     </div>
-                </div>
-                <div class="entry" data-mod="4">
-                    <img src="https://via.placeholder.com/280x100/6e8efb/ffffff?text=Ultimate+Mod" alt="Ultimate Mod">
-                    <div class="entry-content">
-                        <h3>Ultimates Mod</h3>
-                        <a href="download3.zip" class="download-btn" download>⤓ Download</a>
+                    <div class="entry" data-mod="plazasummer" data-attraction="misc">
+                        <img src="images/mods/PlazaSummer.png" alt="Plaza Summer">
+                        <div class="entry-content">
+                            <h3>Plaza Summer</h3>
+                            <a href="mods/NintendoLand_PlazaSummer.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="plazawinter" data-attraction="misc">
+                        <img src="images/mods/PlazaWinter.png" alt="Plaza Winter">
+                        <div class="entry-content">
+                            <h3>Plaza Winter</h3>
+                            <a href="mods/NintendoLand_PlazaWinter.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
+                    </div>
+                    <div class="entry" data-mod="shyguymonita" data-attraction="misc">
+                        <img src="images/mods/ShyGuyMonita.png" alt="Shy Guy Monita">
+                        <div class="entry-content">
+                            <h3>Shy Guy Monita</h3>
+                            <a href="mods/NintendoLand_MonitaShyGuy.zip" class="download-btn" download>⤓ Download</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="description" id="mod-description">
             <h2>Welcome to the Mod Page!</h2>
-            <p>Select a mod from the sidebar to view its description.</p>
+            <p>Filter by attraction, or search by name!</p>
         </div>
     </div>
     <button class="play-button" onclick="window.location.href='index.html'">Back to Homepage</button>
     <script>
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
         const modDescriptions = {
-            1: {
-                title: 'Toadette',
-                content: '<p>This mod for Mario Chase makes the 2nd toad skin, (the pink one) into Toadette!</p><p>Author: Jonahanoj | Wii U Compatibility: Compatible</p>',
+            americaflag: {
+                title: 'Checkpoint to American Flag',
+                content: '<p>Makes the checkpoints in Donkey Kong\'s crash course look like the American flag.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/AmericaFlagDesc.png'
+            },
+            blueplayer: {
+                title: 'Blue Player Skin',
+                content: '<p>Recolors the DKCC player to blue instead of red.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/BluePlayerDesc.png'
+            },
+            dkmappack1: {
+                title: 'Donkey Kong Map Pack 1',
+                content: '<p>A custom DKCC map pack (pack 1).</p><p>Author: Jonahanoj | Wii U Compatibility: Kinda</p>',
+                image: 'images/mods/DKMapPack1Desc.png'
+            },
+            flagfix: {
+                title: 'Checkpoint Fix',
+                content: '<p>DKCC checkpoint flags no longer block earlier flags after you grab a later one (choose-your-own-path friendly). Also raises the time limit to 1000 seconds.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/FlagFixDesc.png'
+            },
+            invincible: {
+                title: 'DKCC Invincible Mod',
+                content: '<p>DKCC invincibility, makes it so you can\'t crash.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/InvincibleDesc.png'
+            },
+            paulinetomonita: {
+                title: 'Pauline to Monita',
+                content: '<p>Replaces the Pauline chalk with Monita.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/PaulineToMonitaDesc.png'
+            },
+            railcolors: {
+                title: '3 Rail Colors',
+                content: '<p>Adds a third DKCC rail color. Set param0 to 1300 for yellow rails.</p><p>Author: Jonahanoj | Wii U Compatibility: None</p>',
+                image: 'images/mods/RailColorsDesc.png'
+            },
+            zyiahendflag: {
+                title: "Zyiah's End Flag",
+                content: '<p>Makes the end flag match Zyiah\'s DKCC editor.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/ZyiahEndFlagDesc.png'
+            },
+            mariocheats: {
+                title: 'Mario Chase Cheats',
+                content: '<p>Removes/Adds various colliders for hiding places as Mario.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/MarioCheatsDesc.png'
+            },
+            yoshizero: {
+                title: 'No Yoshis',
+                content: '<p>Removes all Yoshis from Mario Chase.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/YoshiZeroDesc.png'
+            },
+            yoshione: {
+                title: 'One Yoshi',
+                content: '<p>Mario Chase but with only one Yoshi instead of two.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/YoshiOneDesc.png'
+            },
+            mroinvincible: {
+                title: 'Mario Chase Invincible Mod',
+                content: '<p>Toads cannot tag Mario in Mario Chase (they bounce off instead).</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/MroInvincibleDesc.png'
+            },
+            gerudofortress: {
+                title: 'Gerudo Fortress Map',
+                content: '<p>Replaces the 1st small map in Mario Chase with Gerudo Fortress</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/GerudoFortressDesc.png'
+            },
+            luigimansion: {
+                title: "Luigi's Mansion Map",
+                content: '<p>Replaces the 1st small map in Mario Chase with the 1st big Luigi Mansion map from Nintendo Land.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/LuigiMansionDesc.png'
+            },
+            mario64: {
+                title: "Mario64 Peach's Castle Map",
+                content: '<p>Replaces the 1st small map in Mario Chase with Mario64\'s Peach\'s Castle outside.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/Mario64Desc.png'
+            },
+            mariocustomcolors: {
+                title: 'Mario Chase Custom Toad Colors',
+                content: '<p>Custom colors for Toads in Mario Chase.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/MarioCustomColorsDesc.png'
+            },
+            mk64: {
+                title: 'Block Fort Battle Map (MK64)',
+                content: '<p>Replaces the 1st small map in Mario Chase with the Block Fort Battle map from Mario Kart 64.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/MK64Desc.png'
+            },
+            outsetisland: {
+                title: 'Outset Island Map',
+                content: '<p>Replaces the 1st big map in Mario Chase with Outset Island from Wind Waker.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/OutsetIslandDesc.png'
+            },
+            tenminute: {
+                title: 'Ten Minute Round Mod',
+                content: '<p>Extends Mario Chase round time to ten minutes.</p><p>Author: Jonahanoj | Wii U Compatibility: Unknown</p>',
+                image: 'images/mods/TenMinuteDesc.png'
+            },
+            toadette: {
+                title: 'Toadette Skin',
+                content: '<p>This mod for Mario Chase makes the 2nd toad skin (the pink one) into Toadette!</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
                 image: 'images/mods/toadettedesc.png'
             },
-            2: {
-                title: 'Awesome Mod',
-                content: '<p>An awesome collection of tools and assets that make your game more enjoyable. Includes custom sounds, textures, and UI improvements.</p><p>Author: | Wii U Compatibility:</p>',
-                image: 'https://via.placeholder.com/600x300/a777e3/ffffff?text=Awesome+Mod+Screenshot'
+            plazafall: {
+                title: 'Plaza Fall',
+                content: '<p>Makes the plaza fall themed.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/PlazaFallDesc.png'
             },
-            3: {
-                title: 'Ultimate Mod',
-                content: '<p>The ultimate mod pack with everything you need: new levels, characters, and storylines. Transform your game completely!</p><p>Author: | Wii U Compatibility:</p>',
-                image: 'https://via.placeholder.com/600x300/6e8efb/ffffff?text=Ultimate+Mod+Screenshot'
+            plazasummer: {
+                title: 'Plaza Summer',
+                content: '<p>Makes the plaza summer themed.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/PlazaSummerDesc.png'
             },
-            4: {
-                title: 'Ultimates Mod',
-                content: '<p>The ultimate mod pack with everything you need: new levels, characters, and storylines. Transform your game completely!</p><p>Author: | Wii U Compatibility:</p>',
-                image: 'https://via.placeholder.com/600x300/6e8efb/ffffff?text=Ultimates+Mod+Screenshot'
+            plazawinter: {
+                title: 'Plaza Winter',
+                content: '<p>Makes the plaza winter themed.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/PlazaWinterDesc.png'
             },
+            shyguymonita: {
+                title: 'Shy Guy Monita',
+                content: '<p>This mod makes Monita resemble Shy Guy.</p><p>Author: Jonahanoj | Wii U Compatibility: Yes</p>',
+                image: 'images/mods/ShyGuyMonitaDesc.png'
+            }
         };
 
         document.addEventListener('DOMContentLoaded', () => {
+            const themeSwitch = document.getElementById('theme-switch');
+            const theme = getCookie('theme') || 'light';
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeSwitch.checked = true;
+            }
+
+            themeSwitch.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.body.classList.add('dark-theme');
+                    setCookie('theme', 'dark', 365);
+                } else {
+                    document.body.classList.remove('dark-theme');
+                    setCookie('theme', 'light', 365);
+                }
+            });
+
             const entries = document.querySelectorAll('.entry');
+            const sections = document.querySelectorAll('.attraction-section');
             const description = document.getElementById('mod-description');
             const searchInput = document.getElementById('search-input');
+            const filterButtons = document.querySelectorAll('.attraction-btn');
+            let activeAttraction = 'all';
 
             function revealLines(container) {
                 const lines = container.querySelectorAll('h2, p, img');
@@ -312,8 +916,61 @@
                 });
             }
 
+            function applyFilters() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const isSearching = searchTerm.length > 0;
+
+                sections.forEach(section => {
+                    const sectionAttraction = section.dataset.attraction;
+                    const isMisc = sectionAttraction === 'misc';
+                    const emptyNote = section.querySelector('.empty-mods');
+                    const sectionEntries = section.querySelectorAll('.entry');
+                    const hasEntries = sectionEntries.length > 0;
+
+                    let anyVisible = false;
+                    sectionEntries.forEach(entry => {
+                        const title = entry.querySelector('h3').textContent.toLowerCase();
+                        const matchesSearch = !isSearching || title.includes(searchTerm);
+                        let show = false;
+
+                        if (isMisc) {
+                            // Other/misc: only under All (or when search matches while on All)
+                            show = activeAttraction === 'all' && matchesSearch;
+                        } else {
+                            const matchesAttraction = activeAttraction === 'all' || entry.dataset.attraction === activeAttraction;
+                            show = matchesAttraction && matchesSearch;
+                        }
+
+                        entry.classList.toggle('hidden', !show);
+                        if (show) anyVisible = true;
+                    });
+
+                    let showSection = false;
+                    if (isMisc) {
+                        // Other only when All is selected (and something matches search if searching)
+                        showSection = activeAttraction === 'all' && anyVisible;
+                    } else if (activeAttraction === 'all') {
+                        // On All: only show attractions that have mods (and matching search)
+                        showSection = hasEntries && anyVisible;
+                    } else if (activeAttraction === sectionAttraction) {
+                        // Specific attraction: always show that section
+                        showSection = true;
+                        if (emptyNote) emptyNote.style.display = anyVisible ? 'none' : '';
+                    } else {
+                        showSection = false;
+                    }
+
+                    if (emptyNote && (activeAttraction === 'all' || isMisc)) {
+                        emptyNote.style.display = 'none';
+                    }
+
+                    section.classList.toggle('hidden', !showSection);
+                });
+            }
+
             entries.forEach(entry => {
-                entry.addEventListener('click', () => {
+                entry.addEventListener('click', (e) => {
+                    if (e.target.closest('.download-btn')) return;
                     const modId = entry.dataset.mod;
                     const mod = modDescriptions[modId];
                     if (mod) {
@@ -322,7 +979,6 @@
                             const imageHtml = mod.image ? `<img src="${mod.image}" alt="${mod.title} Image">` : '';
                             description.innerHTML = `<h2>${mod.title}</h2>${mod.content}${imageHtml}`;
                             description.classList.remove('fade-out');
-                            // Trigger reflow
                             description.offsetHeight;
                             revealLines(description);
                         }, 300);
@@ -330,17 +986,17 @@
                 });
             });
 
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                entries.forEach(entry => {
-                    const title = entry.querySelector('h3').textContent.toLowerCase();
-                    if (title.includes(searchTerm)) {
-                        entry.classList.remove('hidden');
-                    } else {
-                        entry.classList.add('hidden');
-                    }
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeAttraction = btn.dataset.filter;
+                    applyFilters();
                 });
             });
+
+            searchInput.addEventListener('input', applyFilters);
+            applyFilters();
         });
     </script>
 </body>
